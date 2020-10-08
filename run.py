@@ -7,10 +7,6 @@ class Document:
     doc_id: int
     text: str
 
-class Summary:
-    sum_id: int
-    summary: str
-
 class DocumentService:
     def __init__(self):
         self.db = dict()
@@ -29,7 +25,7 @@ class DocumentService:
         text = self.db[sum_id].text
         #s_text = summarize(text)
         s_text = 'this is a dummy summary'
-        summary = Summary(sum_id, s_text)
+        summary = Document(sum_id, s_text)
         return summary
 
 app = Flask(__name__)
@@ -53,7 +49,7 @@ def retrieve_document():
 
 @app.route('/', methods = ['GET'])
 def get_summary():
-    sum_id = request.args.get('doc_id')
+    sum_id = request.args.get('sum_id')
     summary = service.summarize(sum_id)
     if summary is not None:
         return summary.__dict__
