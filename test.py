@@ -23,7 +23,7 @@ class FlaskTest(unittest.TestCase):
 
     def test_summarize(self):
         dummy_data = dict(text='this is a very long test to summarize')
-        request_data = dict(doc_id='1')
+        request_data = dict(doc_id='3')
         tester = app.test_client(self)
         tester.post('/', data=dummy_data)
         response = tester.get('/', query_string=request_data)
