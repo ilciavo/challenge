@@ -12,6 +12,11 @@ class Document:
     doc_id: int
     text: str
 
+@dataclass
+class Summary:
+    document_id: int
+    summary: str
+
 class DocumentService:
     def __init__(self):
         self.db = dict()
@@ -33,7 +38,7 @@ class DocumentService:
         else:
             s_text = summarize_text(text)
             #s_text = 'this is a dummy summary'
-            summary = Document(doc_id, s_text)
+            summary = Summary(doc_id, s_text)
             return summary
 
 app = Flask(__name__)
@@ -66,16 +71,3 @@ def get_summary():
 
 if __name__ == '__main__':
     app.run()
-
-#dispatcher, how to know??? ...
-# host/ define a donde va
-# path is unique for everymethod ... get_summary and retrieve_document have the same path
-# summary necesita otro path same doc_id
-# extraer una parte del path como argumento
-# http://host/path1/path2/endpoint?key1=val1&key2=val2
-# whatever is in the path is stable
-# get request.arg.get() is not standard
-# eagerly: compute summary when the text is stored
-# lazy: compute upon request
-# what if you request a non-existing document
-# use get(key) instead of [key] to return None

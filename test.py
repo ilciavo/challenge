@@ -32,7 +32,6 @@ class FlaskTest(unittest.TestCase):
     def test_summarize(self):
         #text = "this is a very long test to summarize"
         text = retrieve_text()
-        #print(text)
         dummy_data = dict(text=text)
         request_data = dict(doc_id='3')
         tester = app.test_client(self)
