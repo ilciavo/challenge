@@ -1,6 +1,11 @@
+"""
+REST service to store, retrieve and summarize upon request
+author: leonardo.echeverria@gmail.com
+"""
+
 from flask import Flask, request, abort
 from dataclasses import dataclass
-import json
+from summarize import summarize_text
 
 @dataclass
 class Document:
@@ -21,12 +26,15 @@ class DocumentService:
         self.db[doc.doc_id] = doc
         return doc
 
-    def summarize(self, sum_id:int):
-        text = self.db[sum_id].text
-        #s_text = summarize(text)
-        s_text = 'this is a dummy summary'
-        summary = Document(sum_id, s_text)
-        return summary
+    def summarize(self, doc_id:int):
+        text = self.db.get(int(doc_id)).text
+        if text is None:
+            return None
+        else:
+            s_text = summarize_text(text)
+            #s_text = 'this is a dummy summary'
+            summary = Document(doc_id, s_text)
+            return summary
 
 app = Flask(__name__)
 
@@ -47,10 +55,10 @@ def retrieve_document():
     else:
         abort(404)
 
-@app.route('/', methods = ['GET'])
+@app.route('/summary', methods = ['GET'])
 def get_summary():
-    sum_id = request.args.get('sum_id')
-    summary = service.summarize(sum_id)
+    doc_id = request.args.get('doc_id')
+    summary = service.summarize(doc_id)
     if summary is not None:
         return summary.__dict__
     else:
@@ -58,3 +66,16 @@ def get_summary():
 
 if __name__ == '__main__':
     app.run()
+
+#dispatcher, how to know??? ...
+# host/ define a donde va
+# path is unique for everymethod ... get_summary and retrieve_document have the same path
+# summary necesita otro path same doc_id
+# extraer una parte del path como argumento
+# http://host/path1/path2/endpoint?key1=val1&key2=val2
+# whatever is in the path is stable
+# get request.arg.get() is not standard
+# eagerly: compute summary when the text is stored
+# lazy: compute upon request
+# what if you request a non-existing document
+# use get(key) instead of [key] to return None
