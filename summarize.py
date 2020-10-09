@@ -1,6 +1,6 @@
 """
-Script to summary text from an url
-source: https://stackabuse.com/text-summarization-with-nltk-in-python/#:~:text=Text%20summarization%20is%20a%20subdomain,and%20deep%20learning-based%20techniques.
+Script to summary text from an url using NLTK
+based on : https://stackabuse.com/text-summarization-with-nltk-in-python/
 author: leonardo.echeverria@gmail.com
 """
 

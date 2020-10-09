@@ -1,5 +1,5 @@
 """
-REST service to store, retrieve and summarize upon request
+REST service to store, retrieve and summarize upon request using flask
 author: leonardo.echeverria@gmail.com
 """
 
@@ -9,7 +9,7 @@ from summarize import summarize_text
 
 @dataclass
 class Document:
-    doc_id: int
+    document_id: int
     text: str
 
 @dataclass
@@ -28,18 +28,19 @@ class DocumentService:
     def store(self, text: str):
         self.next_id += 1
         doc = Document(self.next_id, text)
-        self.db[doc.doc_id] = doc
+        self.db[doc.document_id] = doc
         return doc
 
     def summarize(self, doc_id:int):
-        text = self.db.get(int(doc_id)).text
-        if text is None:
-            return None
-        else:
+        doc = self.db.get(int(doc_id))
+        if doc is not None:
+            text = doc.text
             s_text = summarize_text(text)
             #s_text = 'this is a dummy summary'
             summary = Summary(doc_id, s_text)
             return summary
+        else:
+            return None
 
 app = Flask(__name__)
 
